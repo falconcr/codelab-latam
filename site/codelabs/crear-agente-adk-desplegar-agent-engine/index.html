@@ -1,0 +1,691 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>🤖 Crear y Desplegar un Agente ADK en Vertex AI Agent Engine</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="crear-agente-adk-desplegar-agent-engine"
+                  title="🤖 Crear y Desplegar un Agente ADK en Vertex AI Agent Engine"
+                  environment="web"
+                  feedback-link="https://cloud.google.com/vertex-ai/">
+    
+      <google-codelab-step label="📋 Descripción General" duration="0">
+        <p>En este codelab aprenderás a construir, desplegar y probar un agente de IA usando el <strong>Agent Development Kit (ADK)</strong> y <strong>Vertex AI Agent Engine</strong>. Crearemos un agente especializado en matemáticas y cálculos temporales que puede ejecutarse tanto localmente como en la nube.</p>
+<h2 is-upgraded>🎯 Lo que aprenderás:</h2>
+<ul>
+<li>Conceptos fundamentales de Vertex AI Agent Engine</li>
+<li>Implementación de herramientas (tools) personalizadas</li>
+<li>Manejo de memoria y sesiones en agentes de IA</li>
+<li>Despliegue en Vertex AI Agent Engine</li>
+<li>Testing local vs. remoto</li>
+</ul>
+<h2 is-upgraded>🛠️ Requisitos previos:</h2>
+<ul>
+<li>Python 3.12+</li>
+<li>Cuenta de Google Cloud con Vertex AI habilitado</li>
+<li>Conocimientos básicos de Python</li>
+<li><code>gcloud</code> CLI configurado</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🧠 Conceptos Clave de Vertex AI Agent Engine" duration="2">
+        <h2 is-upgraded>¿Qué es el Agent Development Kit (ADK)?</h2>
+<p>El <strong>ADK</strong> es un framework de Google Cloud que permite crear agentes de IA conversacionales con capacidades avanzadas:</p>
+<ul>
+<li><strong>🔧 Herramientas personalizadas</strong>: Define funciones que el agente puede llamar</li>
+<li><strong>💾 Gestión de memoria</strong>: Manejo automático de sesiones y memoria a largo plazo</li>
+<li><strong>🚀 Despliegue escalable</strong>: Transición perfecta de desarrollo local a producción</li>
+<li><strong>🤖 Modelos avanzados</strong>: Integración con Gemini 2.0 Flash</li>
+</ul>
+<h2 is-upgraded>Arquitectura de Memoria</h2>
+<pre><code language="language-mermaid" class="language-mermaid">graph TB
+    A[Usuario] --&gt; B[Agente ADK]
+    B --&gt; C[Memoria de Sesión]
+    B --&gt; D[Memoria a Largo Plazo]
+    B --&gt; E[Herramientas Personalizadas]
+    C --&gt; F[Vertex AI Memory Bank]
+    D --&gt; F
+</code></pre>
+<h3 is-upgraded>Tipos de Memoria:</h3>
+<ol type="1">
+<li><strong>📝 Memoria de Sesión (Corto plazo)</strong><ul>
+<li>Contexto conversacional dentro de una sesión</li>
+<li>Manejo automático por <code>VertexAiSessionService</code></li>
+<li>Perfecta para conversaciones multi-turno</li>
+</ul>
+</li>
+<li><strong>🏛️ Memory Bank (Largo plazo)</strong><ul>
+<li>Conocimiento persistente entre sesiones</li>
+<li>Búsqueda por similitud semántica</li>
+<li>Personalización basada en historial del usuario</li>
+</ul>
+</li>
+</ol>
+<h2 is-upgraded>Vertex AI Agent Engine</h2>
+<p>El Vertex AI Agent Engine es la plataforma de ejecución (runtime) completamente administrada dentro de Google Cloud para desplegar, administrar y escalar Agentes de IA en entornos de producción.</p>
+<p>Forma parte de Vertex AI Agent Builder, que es el conjunto completo de herramientas y servicios para construir y poner en marcha agentes de IA conversacionales y de flujo de trabajo. Mientras que otros componentes como el Agent Development Kit (ADK) se centran en la construcción del código del agente, el Agent Engine se enfoca en la operación del agente como un servicio en la nube.</p>
+<p>Los agentes de IA que se ejecutan en el Agent Engine se componen típicamente de varios elementos que trabajan juntos para interpretar consultas, razonar, recuperar información y ejecutar acciones.</p>
+<p>Los componentes principales que define Google Cloud para la anatomía de un Agente de IA, y que el Agent Engine gestiona y facilita, son:</p>
+<h3 is-upgraded>1. Modelo (Model)</h3>
+<p>Función: Es el cerebro del agente, generalmente un Modelo de Lenguaje Grande (LLM) como Gemini.</p>
+<p>Rol: Interpreta la consulta del usuario, genera respuestas, realiza el razonamiento y decide si es necesario llamar a una herramienta externa.</p>
+<h3 is-upgraded>2. Herramientas (Tools)</h3>
+<p>Función: Son funciones o módulos externos que extienden las capacidades del agente más allá de la generación de texto. Permiten al agente realizar acciones en el mundo real o acceder a información en bases de datos.</p>
+<p>Ejemplos: Llamadas a APIs externas, ejecución de código (Code Execution), o conexión a servicios de Google Cloud como Vertex AI Search para RAG (Generación Aumentada por Recuperación).</p>
+<h3 is-upgraded>3. Orquestación (Orchestration)</h3>
+<p>Función: Es la capa lógica que guía el comportamiento del agente. Gestiona el flujo de trabajo de múltiples pasos y el razonamiento.</p>
+<p>Rol: Decide cuándo y qué herramienta llamar, combina la salida del modelo con los resultados de las herramientas y mantiene la coherencia en conversaciones complejas.</p>
+<h3 is-upgraded>4. Memoria (Memory)</h3>
+<p>Función: Permite que el agente recuerde interacciones pasadas dentro de una misma conversación (memoria a corto plazo) y acceda a una base de conocimiento persistente (memoria a largo plazo).</p>
+<p>Rol: Almacena el historial de la sesión para conversaciones de múltiples turnos y ayuda al modelo a mantener el contexto y un razonamiento coherente. El Agent Engine proporciona servicios de sesión y banco de memoria para esto.</p>
+<ol type="1" start="5">
+<li>Despliegue (Deployment) y Runtime Función: Es la parte que hace que el agente esté disponible como un servicio en la nube escalable y seguro. Esta es la función principal del Vertex AI Agent Engine como tal.</li>
+</ol>
+<p>Rol: Proporciona un entorno de ejecución (runtime) completamente administrado, maneja la escalabilidad automática, la integración con IAM y la observabilidad (Cloud Logging, Cloud Trace).</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🚀 Configuración del Entorno" duration="5">
+        <h2 is-upgraded>1. Preparar el proyecto</h2>
+<pre><code language="language-bash" class="language-bash"># Clonar o crear directorio del proyecto
+mkdir vertex-ai-agent-project
+cd vertex-ai-agent-project
+
+# Inicializar con uv (gestor de paquetes Python)
+uv init
+</code></pre>
+<h2 is-upgraded>2. Configurar dependencias</h2>
+<p>Crea el archivo <code>pyproject.toml</code>:</p>
+<pre><code language="language-toml" class="language-toml">[project]
+name = &#34;vertex-ai-agent&#34;
+version = &#34;0.1.0&#34;
+description = &#34;Agente de IA con Vertex AI ADK&#34;
+requires-python = &#34;&gt;=3.12&#34;
+dependencies = [
+    &#34;cloudpickle&gt;=3.1.1&#34;,
+    &#34;google-adk&gt;=1.15.1&#34;,
+    &#34;google-cloud-aiplatform[agent-engines]==1.119.0&#34;,
+    &#34;google-genai&gt;=1.41.0&#34;,
+]
+
+[project.scripts]
+main = &#34;main:main&#34;
+test-local = &#34;test_local:main&#34;
+test-deploy = &#34;test_deploy:main&#34;
+</code></pre>
+<h2 is-upgraded>3. Instalar dependencias</h2>
+<pre><code language="language-bash" class="language-bash">uv sync
+</code></pre>
+<h2 is-upgraded>4. Configurar autenticación</h2>
+<pre><code language="language-bash" class="language-bash"># Autenticar con Google Cloud
+gcloud auth login
+gcloud auth application-default login
+
+# Configurar proyecto por defecto
+gcloud config set project TU_PROJECT_ID
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="💻 Implementación del Agente" duration="20">
+        <h2 is-upgraded>🔧 Creando Herramientas Personalizadas</h2>
+<p>Primero, definimos las funciones que nuestro agente podrá usar:</p>
+<pre><code language="language-python" class="language-python">import datetime
+
+def get_current_time():
+    &#34;&#34;&#34;Obtiene la fecha y hora actual.&#34;&#34;&#34;
+    current_time = datetime.datetime.now()
+    return {
+        &#34;status&#34;: &#34;success&#34;,
+        &#34;time&#34;: current_time.strftime(&#34;%Y-%m-%d %H:%M:%S&#34;)
+    }
+
+def simple_calculator(operation: str, a: float, b: float) -&gt; dict:
+    &#34;&#34;&#34;Realiza operaciones matemáticas básicas.&#34;&#34;&#34;
+    try:
+        if operation == &#34;add&#34;:
+            result = a + b
+        elif operation == &#34;subtract&#34;:
+            result = a - b
+        elif operation == &#34;multiply&#34;:
+            result = a * b
+        elif operation == &#34;divide&#34;:
+            result = a / b if b != 0 else &#34;Error: División por cero&#34;
+        else:
+            return {&#34;status&#34;: &#34;error&#34;, &#34;message&#34;: &#34;Operación inválida&#34;}
+        
+        return {&#34;status&#34;: &#34;success&#34;, &#34;result&#34;: result}
+    except Exception as e:
+        return {&#34;status&#34;: &#34;error&#34;, &#34;message&#34;: str(e)}
+</code></pre>
+<h2 is-upgraded>🤖 Archivo Principal: <code>main.py</code></h2>
+<p>Crea el archivo <code>main.py</code> con el siguiente contenido:</p>
+<pre><code language="language-python" class="language-python">#!/usr/bin/env python3
+&#34;&#34;&#34;
+Punto de entrada principal para el despliegue del motor de razonamiento de Vertex AI.
+Este archivo contiene todo lo necesario para que el agente funcione en Vertex AI.
+&#34;&#34;&#34;
+
+import datetime
+import uuid
+import os
+import warnings
+import asyncio
+
+warnings.filterwarnings(&#34;ignore&#34;)
+
+import vertexai
+from google.adk.agents import Agent
+from vertexai.agent_engines import AdkApp
+
+# Configuración
+PROJECT_ID = os.environ.get(&#34;GOOGLE_CLOUD_PROJECT&#34;, &#34;tu-project-id&#34;)
+LOCATION = os.environ.get(&#34;GOOGLE_CLOUD_REGION&#34;, &#34;us-central1&#34;)
+STAGING_BUCKET = &#34;gs://vertex-ai-staging-bucket&#34;
+
+# Inicializar Vertex AI
+vertexai.init(
+    project=PROJECT_ID,
+    location=LOCATION,
+    staging_bucket=STAGING_BUCKET,
+)
+
+client = vertexai.Client(project=PROJECT_ID, location=&#39;us-central1&#39;)
+
+# Definir funciones de herramientas
+def get_current_time():
+    &#34;&#34;&#34;Devuelve la fecha y hora actuales.&#34;&#34;&#34;
+    current_time = datetime.datetime.now()
+    return {
+        &#34;status&#34;: &#34;success&#34;,
+        &#34;time&#34;: current_time.strftime(&#34;%Y-%m-%d %H:%M:%S&#34;)
+    }
+
+def simple_calculator(operation: str, a: float, b: float) -&gt; dict:
+    &#34;&#34;&#34;Realiza operaciones matemáticas básicas.&#34;&#34;&#34;
+    try:
+        if operation == &#34;add&#34;:
+            result = a + b
+        elif operation == &#34;subtract&#34;:
+            result = a - b
+        elif operation == &#34;multiply&#34;:
+            result = a * b
+        elif operation == &#34;divide&#34;:
+            result = a / b if b != 0 else &#34;Error: División por cero&#34;
+        else:
+            return {&#34;status&#34;: &#34;error&#34;, &#34;message&#34;: &#34;Operación inválida&#34;}
+        
+        return {&#34;status&#34;: &#34;success&#34;, &#34;result&#34;: result}
+    except Exception as e:
+        return {&#34;status&#34;: &#34;error&#34;, &#34;message&#34;: str(e)}
+
+# Crear la aplicación ADK
+app = AdkApp(agent=Agent(
+    name=f&#34;math_expert_agent_{uuid.uuid4().hex[:8]}&#34;,
+    model=&#34;gemini-2.0-flash&#34;,
+    global_instruction=(
+        &#34;&#34;&#34;
+        Eres un experto en matemáticas y cálculos de fecha y hora.
+        Puedes ayudar con operaciones matemáticas básicas y consultas temporales.
+        Siempre sé preciso y explica tus cálculos cuando sea apropiado.
+        &#34;&#34;&#34;
+    ),
+    tools=[get_current_time, simple_calculator]
+))
+
+# Desplegar en Vertex AI Agent Engine
+remote_app = client.agent_engines.create(
+    agent=app,
+    config={
+        &#34;requirements&#34;: [
+            &#34;cloudpickle&#34;,
+            &#34;google-adk&gt;=1.15.1&#34;,
+            &#34;google-genai&#34;,
+            &#34;google-cloud-discoveryengine&#34;,
+            &#34;google-cloud-aiplatform[agent-engines]==1.119.0&#34;,
+        ],
+        &#34;staging_bucket&#34;: STAGING_BUCKET,
+    },
+)
+
+print(f&#34;🎉 ¡Despliegue terminado!&#34;)
+print(f&#34;🤖 Motor del Agente: {app}&#34;)
+
+def main():
+    &#34;&#34;&#34;Función principal para el despliegue&#34;&#34;&#34;
+    print(&#34;✅ ¡Agente inicializado exitosamente!&#34;)
+    return app
+
+if __name__ == &#34;__main__&#34;:
+    main()
+</code></pre>
+<h2 is-upgraded>🧪 Testing Local: <code>test_local.py</code></h2>
+<p>Para desarrollo y pruebas locales, crea <code>test_local.py</code>:</p>
+<pre><code language="language-python" class="language-python">#!/usr/bin/env python3
+&#34;&#34;&#34;
+Script de pruebas locales para el agente ADK sin desplegar a Vertex AI.
+Esto ejecuta el agente localmente para propósitos de desarrollo y testing.
+&#34;&#34;&#34;
+
+import datetime
+import uuid
+import asyncio
+import warnings
+
+warnings.filterwarnings(&#34;ignore&#34;)
+
+import vertexai
+from google.adk.agents import Agent
+from vertexai.agent_engines import AdkApp
+
+# Configuración
+PROJECT_ID = &#34;tu-project-id&#34;
+LOCATION = &#34;us-central1&#34;
+STAGING_BUCKET = &#34;gs://vertex-ai-staging-bucket&#34;
+
+# Inicializar Vertex AI
+vertexai.init(
+    project=PROJECT_ID,
+    location=LOCATION,
+    staging_bucket=STAGING_BUCKET,
+)
+
+# Definir funciones de herramientas (igual que main.py)
+def get_current_time():
+    &#34;&#34;&#34;Devuelve la fecha y hora actuales.&#34;&#34;&#34;
+    current_time = datetime.datetime.now()
+    return {
+        &#34;status&#34;: &#34;success&#34;,
+        &#34;time&#34;: current_time.strftime(&#34;%Y-%m-%d %H:%M:%S&#34;)
+    }
+
+def simple_calculator(operation: str, a: float, b: float) -&gt; dict:
+    &#34;&#34;&#34;Realiza operaciones matemáticas básicas.&#34;&#34;&#34;
+    try:
+        if operation == &#34;add&#34;:
+            result = a + b
+        elif operation == &#34;subtract&#34;:
+            result = a - b
+        elif operation == &#34;multiply&#34;:
+            result = a * b
+        elif operation == &#34;divide&#34;:
+            result = a / b if b != 0 else &#34;Error: División por cero&#34;
+        else:
+            return {&#34;status&#34;: &#34;error&#34;, &#34;message&#34;: &#34;Operación inválida&#34;}
+        
+        return {&#34;status&#34;: &#34;success&#34;, &#34;result&#34;: result}
+    except Exception as e:
+        return {&#34;status&#34;: &#34;error&#34;, &#34;message&#34;: str(e)}
+
+# Crear agente y app ADK local (sin despliegue)
+agent = Agent(
+    name=f&#34;local_test_agent_{uuid.uuid4().hex[:8]}&#34;,
+    model=&#34;gemini-2.0-flash&#34;,
+    global_instruction=(
+        &#34;&#34;&#34;
+        Eres un experto en matemáticas y análisis de datos.
+        Te estás ejecutando localmente para propósitos de prueba.
+        &#34;&#34;&#34;
+    ),
+    tools=[get_current_time, simple_calculator]
+)
+
+app = AdkApp(agent=agent)
+
+async def chat_with_agent(message: str, user_id: str = &#34;test_user&#34;, session_id: str = None):
+    &#34;&#34;&#34;Envía un mensaje al agente ADK local y obtiene respuesta&#34;&#34;&#34;
+    try:
+        # Crear sesión si no se proporciona
+        if session_id is None:
+            session = await app.async_create_session(user_id=user_id)
+            session_id = session.id
+        
+        print(f&#34;🤖 Enviando mensaje: &#39;{message}&#39;&#34;)
+        print(&#34;📝 Respuesta:&#34;)
+        
+        # Enviar consulta y recopilar respuesta
+        final_response = &#34;&#34;
+        async for event in app.async_stream_query(
+            user_id=user_id,
+            session_id=session_id,
+            message=message
+        ):
+            # Extraer texto del diccionario de evento
+            if isinstance(event, dict) and &#39;content&#39; in event:
+                content = event[&#39;content&#39;]
+                if content.get(&#39;role&#39;) == &#39;model&#39; and &#39;parts&#39; in content:
+                    for part in content[&#39;parts&#39;]:
+                        if &#39;text&#39; in part and part[&#39;text&#39;]:
+                            text = part[&#39;text&#39;]
+                            print(text, end=&#39;&#39;, flush=True)
+                            final_response += text
+        
+        print(&#34;\n&#34; + &#34;=&#34;*50)
+        return final_response if final_response else &#34;No se recibió respuesta de texto&#34;
+    
+    except Exception as e:
+        error_msg = f&#34;Error: {str(e)}&#34;
+        print(error_msg)
+        return error_msg
+
+async def interactive_chat():
+    &#34;&#34;&#34;Sesión de chat interactiva con el agente local&#34;&#34;&#34;
+    print(&#34;🚀 Prueba de Agente ADK Local&#34;)
+    print(f&#34;📋 Nombre del Agente: {agent.name}&#34;)
+    print(&#34;💬 Escribe &#39;quit&#39; o &#39;exit&#39; para terminar la sesión&#34;)
+    print(&#34;=&#34;*50)
+    
+    user_id = &#34;local_test_user&#34;
+    session = await app.async_create_session(user_id=user_id)
+    session_id = session.id
+    
+    while True:
+        try:
+            message = input(&#34;\n👤 Tú: &#34;).strip()
+            
+            if message.lower() in [&#39;quit&#39;, &#39;exit&#39;, &#39;q&#39;]:
+                print(&#34;👋 ¡Adiós!&#34;)
+                break
+            
+            if not message:
+                continue
+            
+            await chat_with_agent(message, user_id, session_id)
+            
+        except KeyboardInterrupt:
+            print(&#34;\n👋 ¡Adiós!&#34;)
+            break
+        except Exception as e:
+            print(f&#34;❌ Error: {e}&#34;)
+
+async def run_test_cases():
+    &#34;&#34;&#34;Ejecutar algunos casos de prueba predefinidos&#34;&#34;&#34;
+    print(&#34;🧪 Ejecutando Casos de Prueba&#34;)
+    print(&#34;=&#34;*50)
+    
+    test_cases = [
+        &#34;¡Hola! ¿En qué me puedes ayudar?&#34;,
+        &#34;¿Qué hora es ahora mismo?&#34;,
+        &#34;Calcula 15 + 27&#34;,
+        &#34;¿Cuánto es 100 dividido por 4?&#34;,
+        &#34;¿Puedes multiplicar 8 por 12?&#34;,
+        &#34;Cuéntame sobre ciencia de datos&#34;,
+    ]
+    
+    for i, test_case in enumerate(test_cases, 1):
+        print(f&#34;\n📝 Prueba {i}/{len(test_cases)}&#34;)
+        await chat_with_agent(test_case)
+        await asyncio.sleep(1)  # Pequeña pausa entre pruebas
+
+async def main():
+    &#34;&#34;&#34;Función principal para testing local&#34;&#34;&#34;
+    print(&#34;🏠 Testing Local de Agente ADK&#34;)
+    print(&#34;=&#34;*50)
+    
+    while True:
+        print(&#34;\nElige una opción:&#34;)
+        print(&#34;1. Ejecutar chat interactivo&#34;)
+        print(&#34;2. Ejecutar casos de prueba&#34;)
+        print(&#34;3. Prueba de mensaje único&#34;)
+        print(&#34;4. Salir&#34;)
+        
+        try:
+            choice = input(&#34;\nIngresa tu elección (1-4): &#34;).strip()
+            
+            if choice == &#34;1&#34;:
+                await interactive_chat()
+            elif choice == &#34;2&#34;:
+                await run_test_cases()
+            elif choice == &#34;3&#34;:
+                message = input(&#34;Ingresa tu mensaje: &#34;).strip()
+                if message:
+                    await chat_with_agent(message)
+            elif choice == &#34;4&#34;:
+                print(&#34;👋 ¡Adiós!&#34;)
+                break
+            else:
+                print(&#34;❌ Elección inválida. Por favor ingresa 1, 2, 3, o 4.&#34;)
+                
+        except KeyboardInterrupt:
+            print(&#34;\n👋 ¡Adiós!&#34;)
+            break
+        except Exception as e:
+            print(f&#34;❌ Error: {e}&#34;)
+
+if __name__ == &#34;__main__&#34;:
+    asyncio.run(main())
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🧪 Testing y Validación" duration="0">
+        <h2 is-upgraded>1. Testing Local</h2>
+<pre><code language="language-bash" class="language-bash"># Ejecutar pruebas locales
+uv run python test_local.py
+</code></pre>
+<p><strong>Opciones disponibles:</strong></p>
+<ul>
+<li><strong>Chat interactivo</strong>: Conversa en tiempo real con el agente</li>
+<li><strong>Casos de prueba</strong>: Ejecuta escenarios predefinidos</li>
+<li><strong>Mensaje único</strong>: Prueba rápida de un mensaje</li>
+</ul>
+<h2 is-upgraded>2. Desplegar a Vertex AI</h2>
+<pre><code language="language-bash" class="language-bash"># Desplegar el agente
+uv run python main.py
+</code></pre>
+<p>El script mostrará:</p>
+<pre><code>🎉 ¡Despliegue terminado!
+🤖 Motor del Agente: &lt;AdkApp object&gt;
+</code></pre>
+<h2 is-upgraded>3. Testing del Agente Desplegado</h2>
+<p>Crea <code>test_deploy.py</code> para probar el agente en la nube:</p>
+<pre><code language="language-python" class="language-python">import asyncio
+import vertexai
+from vertexai import agent_engines
+
+async def main():
+    &#34;&#34;&#34;Crea una sesión e interactúa con el motor del agente.&#34;&#34;&#34;
+    # Reemplaza con el ID de tu agente desplegado
+    remote_app = agent_engines.get(&#39;TU_AGENT_ENGINE_ID&#39;)
+    print(f&#34;Motor del agente: {remote_app.display_name}&#34;)
+    
+    try:
+        session = await remote_app.async_create_session(user_id=&#39;usuario_123&#39;)
+        print(f&#34;Sesión creada: {session}&#34;)
+        
+        session_id = session[&#39;id&#39;] if isinstance(session, dict) else session.name
+        print(f&#34;Usando ID de sesión: {session_id}&#34;)
+        
+        response = remote_app.async_stream_query(
+            message=&#34;Hola, ¿en qué me puedes ayudar?&#34;,
+            user_id=&#39;usuario_123&#39;,
+            session_id=session_id
+        )
+        
+        async for chunk in response:
+            if isinstance(chunk, dict) and &#39;content&#39; in chunk:
+                content = chunk[&#39;content&#39;]
+                if &#39;parts&#39; in content and content[&#39;parts&#39;]:
+                    text = content[&#39;parts&#39;][0].get(&#39;text&#39;, &#39;&#39;)
+                    if text:
+                        print(f&#34;Respuesta: {text}&#34;)
+                        
+    except Exception as e:
+        print(f&#34;Error durante la interacción de sesión: {e}&#34;)
+
+# Ejecutar la función async main
+asyncio.run(main())
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🔍 Casos de Uso y Ejemplos" duration="0">
+        <h2 is-upgraded>Ejemplos de Interacciones</h2>
+<pre><code language="language-python" class="language-python"># Consulta temporal
+&#34;¿Qué hora es?&#34;
+# Respuesta: &#34;La hora actual es 2024-01-15 14:30:45&#34;
+
+# Operaciones matemáticas
+&#34;Calcula 25 multiplicado por 8&#34;
+# Respuesta: &#34;25 × 8 = 200&#34;
+
+# Operaciones complejas
+&#34;Si tengo $1000 y gano 15% de interés mensual durante 3 meses, ¿cuánto tendré?&#34;
+# El agente usará la calculadora multiple veces para calcular el interés compuesto
+</code></pre>
+<h2 is-upgraded>Personalización del Agente</h2>
+<p>Puedes modificar las <code>global_instruction</code> para cambiar el comportamiento:</p>
+<pre><code language="language-python" class="language-python">global_instruction=(
+    &#34;&#34;&#34;
+    Eres un asistente financiero especializado.
+    - Siempre proporciona explicaciones detalladas de los cálculos
+    - Usa términos financieros apropiados
+    - Sugiere mejores prácticas financieras cuando sea relevante
+    &#34;&#34;&#34;
+)
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🚀 Despliegue y Escalado" duration="0">
+        <h2 is-upgraded>Configuración de Producción</h2>
+<ol type="1">
+<li><strong>Variables de entorno</strong>:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash">export GOOGLE_CLOUD_PROJECT=&#34;tu-proyecto-produccion&#34;
+export GOOGLE_CLOUD_REGION=&#34;us-central1&#34;
+export VERTEX_AI_STAGING_BUCKET=&#34;gs://tu-bucket-produccion&#34;
+</code></pre>
+<ol type="1" start="2">
+<li><strong>Configuración de memoria avanzada</strong>:</li>
+</ol>
+<pre><code language="language-python" class="language-python">from google.adk.memory import VertexAiMemoryBankService
+
+# Agregar Memory Bank para memoria a largo plazo
+memory_service = VertexAiMemoryBankService(
+    project_id=PROJECT_ID,
+    location=LOCATION,
+    corpus_id=&#34;tu-corpus-id&#34;
+)
+
+agent = Agent(
+    name=&#34;agent_with_memory&#34;,
+    model=&#34;gemini-2.0-flash&#34;,
+    global_instruction=instruction,
+    tools=tools,
+    memory_service=memory_service  # Memoria persistente
+)
+</code></pre>
+<h2 is-upgraded>Monitoreo y Logs</h2>
+<pre><code language="language-python" class="language-python">import logging
+
+# Configurar logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# En tu agente
+logger.info(f&#34;Agente iniciado: {agent.name}&#34;)
+logger.info(f&#34;Herramientas disponibles: {[tool.__name__ for tool in tools]}&#34;)
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🔧 Troubleshooting" duration="0">
+        <h2 is-upgraded>Problemas Comunes</h2>
+<ol type="1">
+<li><strong>Error de autenticación</strong>:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash"># Verificar autenticación
+gcloud auth list
+gcloud auth application-default login
+</code></pre>
+<ol type="1" start="2">
+<li><strong>Dependencias faltantes</strong>:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash"># Reinstalar dependencias
+uv sync --force
+</code></pre>
+<ol type="1" start="3">
+<li><strong>Problemas de permisos en Vertex AI</strong>:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash"># Verificar permisos del proyecto
+gcloud projects get-iam-policy TU_PROJECT_ID
+</code></pre>
+<ol type="1" start="4">
+<li><strong>Error en staging bucket</strong>:</li>
+</ol>
+<pre><code language="language-bash" class="language-bash"># Crear bucket si no existe
+gsutil mb gs://tu-vertex-ai-staging-bucket
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="📚 Recursos Adicionales" duration="0">
+        <h2 is-upgraded>Documentación oficial:</h2>
+<ul>
+<li><a href="https://cloud.google.com/vertex-ai/generative-ai/docs/agent-development-kit/" target="_blank">Vertex AI Agent Development Kit</a></li>
+<li><a href="https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview" target="_blank">Agent Engine Memory Bank</a></li>
+<li><a href="https://google.github.io/adk-docs/" target="_blank">ADK Tools Documentation</a></li>
+</ul>
+<h2 is-upgraded>Mejores prácticas:</h2>
+<ol type="1">
+<li><strong>Seguridad</strong>: Nunca hardcodear credenciales en el código</li>
+<li><strong>Testing</strong>: Siempre probar localmente antes de desplegar</li>
+<li><strong>Monitoring</strong>: Implementar logging apropiado para producción</li>
+<li><strong>Escalabilidad</strong>: Usar Memory Bank para aplicaciones con múltiples usuarios</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="🎯 Próximos Pasos" duration="0">
+        <ol type="1">
+<li><strong>Expandir herramientas</strong>: Agrega más funciones personalizadas</li>
+<li><strong>Implementar Memory Bank</strong>: Para memoria a largo plazo</li>
+<li><strong>Integración con APIs</strong>: Conecta con servicios externos</li>
+<li><strong>UI Frontend</strong>: Crear una interfaz web para tu agente</li>
+<li><strong>Monitoreo avanzado</strong>: Implementar métricas y alertas</li>
+</ol>
+<p>¡Felicidades! Has creado exitosamente un agente de IA con Vertex AI ADK. 🎉</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

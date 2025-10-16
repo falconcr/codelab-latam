@@ -1,18 +1,18 @@
-summary: Crear y Desplegar un Agente ADK en Vertex AI
-id: crear-agente-adk-vertex-ai
+summary: Crear y Desplegar un Agente ADK en Vertex AI Agent Engine
+id: crear-agente-adk-desplegar-agent-engine
 categories: Vertex AI, ADK, Agents
 tags: intermediate
 status: Published
 authors: Falcon
 Feedback Link: https://cloud.google.com/vertex-ai/
 
-# 🤖 Construcción de un Agente de IA con Vertex AI Agent Development Kit (ADK)
+# 🤖 Crear y Desplegar un Agente ADK en Vertex AI Agent Engine
 
 Duration: 1
 
 ## 📋 Descripción General
 
-En este codelab aprenderás a construir, desplegar y probar un agente de IA usando el **Vertex AI Agent Development Kit (ADK)**. Crearemos un agente especializado en matemáticas y cálculos temporales que puede ejecutarse tanto localmente como en la nube.
+En este codelab aprenderás a construir, desplegar y probar un agente de IA usando el **Agent Development Kit (ADK)** y **Vertex AI Agent Engine**. Crearemos un agente especializado en matemáticas y cálculos temporales que puede ejecutarse tanto localmente como en la nube.
 
 ### 🎯 Lo que aprenderás:
 - Conceptos fundamentales de Vertex AI Agent Engine
@@ -65,6 +65,41 @@ graph TB
    - Conocimiento persistente entre sesiones
    - Búsqueda por similitud semántica
    - Personalización basada en historial del usuario
+
+### Vertex AI Agent Engine 
+
+El Vertex AI Agent Engine es la plataforma de ejecución (runtime) completamente administrada dentro de Google Cloud para desplegar, administrar y escalar Agentes de IA en entornos de producción.
+
+Forma parte de Vertex AI Agent Builder, que es el conjunto completo de herramientas y servicios para construir y poner en marcha agentes de IA conversacionales y de flujo de trabajo. Mientras que otros componentes como el Agent Development Kit (ADK) se centran en la construcción del código del agente, el Agent Engine se enfoca en la operación del agente como un servicio en la nube.
+
+Los agentes de IA que se ejecutan en el Agent Engine se componen típicamente de varios elementos que trabajan juntos para interpretar consultas, razonar, recuperar información y ejecutar acciones.
+
+Los componentes principales que define Google Cloud para la anatomía de un Agente de IA, y que el Agent Engine gestiona y facilita, son:
+
+#### 1. Modelo (Model)
+Función: Es el cerebro del agente, generalmente un Modelo de Lenguaje Grande (LLM) como Gemini.
+
+Rol: Interpreta la consulta del usuario, genera respuestas, realiza el razonamiento y decide si es necesario llamar a una herramienta externa.
+
+#### 2. Herramientas (Tools)
+Función: Son funciones o módulos externos que extienden las capacidades del agente más allá de la generación de texto. Permiten al agente realizar acciones en el mundo real o acceder a información en bases de datos.
+
+Ejemplos: Llamadas a APIs externas, ejecución de código (Code Execution), o conexión a servicios de Google Cloud como Vertex AI Search para RAG (Generación Aumentada por Recuperación).
+
+#### 3. Orquestación (Orchestration)
+Función: Es la capa lógica que guía el comportamiento del agente. Gestiona el flujo de trabajo de múltiples pasos y el razonamiento.
+
+Rol: Decide cuándo y qué herramienta llamar, combina la salida del modelo con los resultados de las herramientas y mantiene la coherencia en conversaciones complejas.
+
+#### 4. Memoria (Memory)
+Función: Permite que el agente recuerde interacciones pasadas dentro de una misma conversación (memoria a corto plazo) y acceda a una base de conocimiento persistente (memoria a largo plazo).
+
+Rol: Almacena el historial de la sesión para conversaciones de múltiples turnos y ayuda al modelo a mantener el contexto y un razonamiento coherente. El Agent Engine proporciona servicios de sesión y banco de memoria para esto.
+
+5. Despliegue (Deployment) y Runtime
+Función: Es la parte que hace que el agente esté disponible como un servicio en la nube escalable y seguro. Esta es la función principal del Vertex AI Agent Engine como tal.
+
+Rol: Proporciona un entorno de ejecución (runtime) completamente administrado, maneja la escalabilidad automática, la integración con IAM y la observabilidad (Cloud Logging, Cloud Trace).
 
 ---
 

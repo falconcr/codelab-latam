@@ -1,0 +1,27 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2025-10-16T09:06:32-06:00",
+  "id": "crear-agente-adk-desplegar-agent-engine",
+  "duration": 27,
+  "title": "🤖 Crear y Desplegar un Agente ADK en Vertex AI Agent Engine",
+  "authors": "Falcon",
+  "summary": "Crear y Desplegar un Agente ADK en Vertex AI Agent Engine",
+  "source": "codelab.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "vertexai",
+    "adk",
+    "agents"
+  ],
+  "tags": [
+    "intermediate"
+  ],
+  "feedback": "https://cloud.google.com/vertex-ai/",
+  "url": "crear-agente-adk-desplegar-agent-engine"
+}

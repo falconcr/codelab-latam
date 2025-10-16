@@ -1,90 +1,206 @@
-# Tools for authoring and serving codelabs
+# Herramientas para crear y servir codelabs
 
-Codelabs are interactive instructional tutorials, which can be authored in Google Docs
-using some simple formatting conventions. You can also author codelabs using markdown syntax.
-This repo contains all the tools and documentation you’ll need for building and publishing
-your own codelabs.
+Los codelabs son tutoriales interactivos educativos que se pueden crear en Google Docs usando algunas convenciones de formato simples. También puedes crear codelabs usando sintaxis Markdown. Este repositorio contiene todas las herramientas y documentación que necesitas para construir y publicar tus propios codelabs.
 
-If you're interested in authoring codelabs, create a doc following the [Codelab Formatting Guide](FORMAT-GUIDE.md). 
-and see the [claat](claat) directory for a detailed description of the `claat` command line tool.
+Si estás interesado en crear codelabs, crea un documento siguiendo la [Guía de Formato de Codelabs](FORMAT-GUIDE.md) y consulta el directorio [claat](claat) para una descripción detallada de la herramienta de línea de comandos `claat`.
 
-Also, consider joining the [codelab-authors Google Group](https://groups.google.com/forum/#!forum/codelab-authors),
-which connects you with other authors and provides updates on new releases. 
+También considera unirte al [grupo de Google codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona actualizaciones sobre nuevas versiones.
 
-## What is this?
+## ¿Qué es esto?
 
-For the past 3+ years, the CLaaT (Codelabs as a Thing) project has given developers around the
-world a hands-on experience with Google products and tools.  We’ve accumulated over 500 high quality
-codelabs, served millions of web visitors, and supported over 100 events, from local meetups
-all the way up to Google I/O.
+Durante más de 3 años, el proyecto CLaaT (Codelabs as a Thing) ha dado a desarrolladores de todo el mundo una experiencia práctica con productos y herramientas de Google. Hemos acumulado más de 500 codelabs de alta calidad, servido millones de visitantes web y apoyado más de 100 eventos, desde reuniones locales hasta Google I/O.
 
-This project has been implemented as a volunteer project by a small group of dedicated Googlers
-who care deeply about this kind of “learning by doing” approach to education.
+Este proyecto ha sido implementado como un proyecto voluntario por un pequeño grupo de Googlers dedicados que se preocupan profundamente por este enfoque de "aprender haciendo" para la educación.
 
-## What's special about this tool?
+## ¿Qué hace especial a esta herramienta?
 
-* Powerful and flexible authoring flow via Google Docs
-* Optional support for authoring in Markdown text
-* Ability to produce interactive web or markdown tutorials without writing any code
-* Easy interactive previewing
-* Usage monitoring via Google Analytics
-* Support for multiple target environments (kiosk, web, markdown, offline, etc.)
-* Support for anonymous use - ideal for public computers at developer events
-* Looks great, with a responsive web implementation
-* Remembers where the student left off when returning to a codelab
-* Mobile friendly user experience
+* Flujo de creación potente y flexible a través de Google Docs
+* Soporte opcional para crear en texto Markdown
+* Capacidad de producir tutoriales web o markdown interactivos sin escribir código
+* Vista previa interactiva fácil
+* Monitoreo de uso a través de Google Analytics
+* Soporte para múltiples entornos objetivo (kiosco, web, markdown, offline, etc.)
+* Soporte para uso anónimo - ideal para computadoras públicas en eventos de desarrolladores
+* Se ve genial, con una implementación web responsiva
+* Recuerda dónde se quedó el estudiante al regresar a un codelab
+* Experiencia de usuario amigable para móviles
 
-## Can I use this to create my own codelabs and serve my own codelabs online?
+## ¿Puedo usar esto para crear mis propios codelabs y servir mis codelabs en línea?
 
-Yes, the claat tool and the serving mechanism can be used by anyone to author their
-own codelabs and to serve up their own codelabs on the web.
+Sí, la herramienta claat y el mecanismo de servicio pueden ser usados por cualquiera para crear sus propios codelabs y servir sus propios codelabs en la web.
 
-You can also use this tool to create a nice looking summary page like the one you see on the official [Google Codelabs site](https://g.co/codelabs).
+También puedes usar esta herramienta para crear una página de resumen atractiva como la que ves en el [sitio oficial de Google Codelabs](https://g.co/codelabs).
 
-If you're interested in authoring codelabs, join [codelab-authors group](https://groups.google.com/forum/#!forum/codelab-authors),
-which connects you with other authors and provides access to the
-[Codelab Formatting Guide](FORMAT-GUIDE.md).
+Si estás interesado en crear codelabs, únete al [grupo codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona acceso a la [Guía de Formato de Codelabs](FORMAT-GUIDE.md).
 
-## Ok, how do I use it?
+## ¿Cómo lo uso?
 
-Check out this [excellent tutorial](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd).
+Consulta este [excelente tutorial](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd).
 
-1. Create a doc following the syntax conventions described in the [Codelab Formatting Guide](FORMAT-GUIDE.md). Here’s an [example doc](https://docs.google.com/document/d/1E6XMcdTexh5O8JwGy42SY3Ehzi8gOfUGiqTiUX6N04o/). Feel free to copy that doc as a starter template. Once you have your own source doc, note its DocId, which is the long string near the end of the URL (right after docs.google.com/document/d/).
+### Configuración del proyecto
 
-1. Make one or more changes and preview your codelab, using the preview app provided by Google. To preview a codelab, install the [Preview Codelab Chrome extension](https://chrome.google.com/webstore/detail/preview-codelab/lhojjnijnkiglhkggagbapfonpdlinji) in your browser. Now you can preview a codelab directly from the Google Doc view by clicking the Chrome extension’s button, which will open a new tab to display the preview. Alternatively, navigate manually to https://codelabs-preview.appspot.com/?file_id=<google-doc-id>
+1. **Prerrequisitos**
+- Node.js y npm instalados
+- Go instalado (para claat)
+- Navegador web moderno
 
-1. Install the claat command -- see the [README in the claat directory](https://github.com/googlecodelabs/tools/blob/master/claat/README.md) of this repo for instructions..
+2. **Instalación**
+```bash
+# Clonar el repositorio
+git clone https://github.com/googlecodelabs/tools.git
+cd tools
 
-1. Run the claat command to transform the doc contents into one of the supported output formats. The default supported formats are html and markdown but the claat tool supports adding additional formats by specifying a path to a Go template. For example, using the example document above:
+# Instalar dependencias
+npm install
 
-        $ claat export 1rpHleSSeY-MJZ8JvncvYA8CFqlnlcrW8-a4uEaqizPY  
-        ok      your-first-pwapp
+# Construir claat
+cd claat
+go build
+```
 
-    You can also specify a markdown document (.md file) as input. It has to adhere to the syntax conventions described [here](https://github.com/googlecodelabs/tools/tree/master/claat/parser/md)
+3. **Crear un documento** siguiendo las convenciones de sintaxis descritas en la [Guía de Formato de Codelabs](FORMAT-GUIDE.md). Aquí hay un [documento de ejemplo](https://docs.google.com/document/d/1E6XMcdTexh5O8JwGy42SY3Ehzi8gOfUGiqTiUX6N04o/). Siéntete libre de copiar ese documento como plantilla inicial. Una vez que tengas tu propio documento fuente, anota su DocId, que es la cadena larga cerca del final de la URL (justo después de docs.google.com/document/d/).
 
-        $ claat export document.md
-        ok      your-md-based-codelab
+4. **Hacer cambios y previsualizar** tu codelab, usando la aplicación de vista previa proporcionada por Google. Para previsualizar un codelab, instala la [extensión de Chrome Preview Codelab](https://chrome.google.com/webstore/detail/preview-codelab/lhojjnijnkiglhkggagbapfonpdlinji) en tu navegador. Ahora puedes previsualizar un codelab directamente desde la vista de Google Doc haciendo clic en el botón de la extensión de Chrome, que abrirá una nueva pestaña para mostrar la vista previa. Alternativamente, navega manualmente a https://codelabs-preview.appspot.com/?file_id=<google-doc-id>
 
-1. Run the claat serve command.
+5. **Instalar el comando claat** -- consulta el [README en el directorio claat](https://github.com/googlecodelabs/tools/blob/master/claat/README.md) de este repo para instrucciones.
 
-        $ claat serve
+6. **Ejecutar el comando claat** para transformar el contenido del documento en uno de los formatos de salida soportados. Los formatos soportados por defecto son html y markdown, pero la herramienta claat soporta agregar formatos adicionales especificando una ruta a una plantilla Go. Por ejemplo, usando el documento de ejemplo anterior:
 
-This will start a local web server and open a browser tab to the local server. Click on the
-hyperlink represent your codelab of interest to experience a fully rendered version.
+```
+cd site/codelabs/
+claat export 1rpHleSSeY-MJZ8JvncvYA8CFqlnlcrW8-a4uEaqizPY  
+ok      your-first-pwapp
+```
 
-## How do I generate my own landing page?
+También puedes especificar un documento markdown (archivo .md) como entrada. Debe adherirse a las convenciones de sintaxis descritas [aquí](https://github.com/googlecodelabs/tools/tree/master/claat/parser/md)
 
-See instructions in the [site directory's readme](site/README.md).
+```
+cd site/codelabs/
+claat export document.md
+ok      your-md-based-codelab
+```
+7. **Ejecutar el comando gulp serve**.
+```
+cd site/codelabs/# Herramientas para crear y servir codelabs
 
-## How do I generate a custom view?
+Los codelabs son tutoriales interactivos educativos que se pueden crear en Google Docs usando algunas convenciones de formato simples. También puedes crear codelabs usando sintaxis Markdown. Este repositorio contiene todas las herramientas y documentación que necesitas para construir y publicar tus propios codelabs.
 
-Copy the [sample view](site/app/views/vslive), customize it to your liking,
-tag and rebuild the codelabs you want included, and then generate your view.
+Si estás interesado en crear codelabs, crea un documento siguiendo la [Guía de Formato de Codelabs](FORMAT-GUIDE.md) y consulta el directorio [claat](claat) para una descripción detallada de la herramienta de línea de comandos `claat`.
 
-## How do I publish my codelabs?
+También considera unirte al [grupo de Google codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona actualizaciones sobre nuevas versiones.
 
-The output generated by `claat` is a purely static set of HTML or Markdown code. As such,
-it can be served by any web serving mechanism, including any of the following options:
+## ¿Qué es esto?
+
+Durante más de 3 años, el proyecto CLaaT (Codelabs as a Thing) ha dado a desarrolladores de todo el mundo una experiencia práctica con productos y herramientas de Google. Hemos acumulado más de 500 codelabs de alta calidad, servido millones de visitantes web y apoyado más de 100 eventos, desde reuniones locales hasta Google I/O.
+
+Este proyecto ha sido implementado como un proyecto voluntario por un pequeño grupo de Googlers dedicados que se preocupan profundamente por este enfoque de "aprender haciendo" para la educación.
+
+## ¿Qué hace especial a esta herramienta?
+
+* Flujo de creación potente y flexible a través de Google Docs
+* Soporte opcional para crear en texto Markdown
+* Capacidad de producir tutoriales web o markdown interactivos sin escribir código
+* Vista previa interactiva fácil
+* Monitoreo de uso a través de Google Analytics
+* Soporte para múltiples entornos objetivo (kiosco, web, markdown, offline, etc.)
+* Soporte para uso anónimo - ideal para computadoras públicas en eventos de desarrolladores
+* Se ve genial, con una implementación web responsiva
+* Recuerda dónde se quedó el estudiante al regresar a un codelab
+* Experiencia de usuario amigable para móviles
+
+## ¿Puedo usar esto para crear mis propios codelabs y servir mis codelabs en línea?
+
+Sí, la herramienta claat y el mecanismo de servicio pueden ser usados por cualquiera para crear sus propios codelabs y servir sus propios codelabs en la web.
+
+También puedes usar esta herramienta para crear una página de resumen atractiva como la que ves en el [sitio oficial de Google Codelabs](https://g.co/codelabs).
+
+Si estás interesado en crear codelabs, únete al [grupo codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona acceso a la [Guía de Formato de Codelabs](FORMAT-GUIDE.md).
+
+## ¿Cómo lo uso?
+
+Consulta este [excelente tutorial](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd).
+
+### Configuración del proyecto
+
+1. **Prerrequisitos**
+- Node.js y npm instalados
+- Go instalado (para claat)
+- Navegador web moderno
+
+2. **Instalación**
+```bash
+# Clonar el repositorio
+git clone https://github.com/googlecodelabs/tools.git
+cd tools
+
+# Instalar dependencias
+npm install
+
+# Construir claat
+cd claat
+go build
+```
+
+3. **Crear un documento** siguiendo las convenciones de sintaxis descritas en la [Guía de Formato de Codelabs](FORMAT-GUIDE.md). Aquí hay un [documento de ejemplo](https://docs.google.com/document/d/1E6XMcdTexh5O8JwGy42SY3Ehzi8gOfUGiqTiUX6N04o/). Siéntete libre de copiar ese documento como plantilla inicial. Una vez que tengas tu propio documento fuente, anota su DocId, que es la cadena larga cerca del final de la URL (justo después de docs.google.com/document/d/).
+
+4. **Hacer cambios y previsualizar** tu codelab, usando la aplicación de vista previa proporcionada por Google. Para previsualizar un codelab, instala la [extensión de Chrome Preview Codelab](https://chrome.google.com/webstore/detail/preview-codelab/lhojjnijnkiglhkggagbapfonpdlinji) en tu navegador. Ahora puedes previsualizar un codelab directamente desde la vista de Google Doc haciendo clic en el botón de la extensión de Chrome, que abrirá una nueva pestaña para mostrar la vista previa. Alternativamente, navega manualmente a https://codelabs-preview.appspot.com/?file_id=<google-doc-id>
+
+5. **Instalar el comando claat** -- consulta el [README en el directorio claat](https://github.com/googlecodelabs/tools/blob/master/claat/README.md) de este repo para instrucciones.
+
+6. **Ejecutar el comando claat** para transformar el contenido del documento en uno de los formatos de salida soportados. Los formatos soportados por defecto son html y markdown, pero la herramienta claat soporta agregar formatos adicionales especificando una ruta a una plantilla Go. Por ejemplo, usando el documento de ejemplo anterior:
+
+```
+cd site/codelabs/
+claat export 1rpHleSSeY-MJZ8JvncvYA8CFqlnlcrW8-a4uEaqizPY  
+ok      your-first-pwapp
+```
+
+También puedes especificar un documento markdown (archivo .md) como entrada. Debe adherirse a las convenciones de sintaxis descritas [aquí](https://github.com/googlecodelabs/tools/tree/master/claat/parser/md)
+
+```
+cd site/codelabs/
+claat export document.md
+ok      your-md-based-codelab
+```
+7. **Ejecutar el comando gulp serve**.
+```
+cd site/codelabs/
+gulp serve --codelabs-dir=codelabs
+```
+
+
+
+Esto iniciará un servidor web local y abrirá una pestaña del navegador al servidor local. Haz clic en el hipervínculo que representa tu codelab de interés para experimentar una versión completamente renderizada.
+
+## Comandos de construcción disponibles
+
+Desde el directorio raíz del proyecto:
+
+```bash
+# Limpiar archivos de construcción
+npm run clean
+
+# Construir todos los elementos
+npm run build
+
+# Ejecutar pruebas
+npm run test
+
+# Publicar a npm (solo para mantenedores)
+npm run pub
+```
+
+## ¿Cómo genero mi propia página de inicio?
+
+Consulta las instrucciones en el [readme del directorio site](site/README.md).
+
+## ¿Cómo genero una vista personalizada?
+
+Copia la [vista de muestra](site/app/views/vslive), personalízala a tu gusto, etiqueta y reconstruye los codelabs que quieres incluir, y luego genera tu vista.
+
+## ¿Cómo publico mis codelabs?
+
+La salida generada por `claat` es un conjunto puramente estático de código HTML o Markdown. Como tal, puede ser servido por cualquier mecanismo de servicio web, incluyendo cualquiera de las siguientes opciones:
 
 * Github Pages (`*.github.io`)
 * [Google App Engine](https://cloud.google.com/appengine)
@@ -92,95 +208,542 @@ it can be served by any web serving mechanism, including any of the following op
 * [Google Cloud Storage](https://cloud.google.com/storage)
 * Amazon Web Services S3
 * Netlify
-* Any open source web server (Nginx, Apache)
+* Cualquier servidor web de código abierto (Nginx, Apache)
 * `python -m SimpleHTTPServer` (Python 2)
 * `python3 -m http.server` (Python 3)
 
-Simply commit the artifacts generated by the claat command into your preferred serving vehicle
-and you should be ready to go.
+Simplemente confirma los artefactos generados por el comando claat en tu vehículo de servicio preferido y deberías estar listo para comenzar.
 
-The [site directory](site) contains tools for building your own custom landing page(s) and publishing both landing
-pages and codelabs to Google Cloud Storage.
+El [directorio site](site) contiene herramientas para construir tus propias páginas de inicio personalizadas y publicar tanto páginas de inicio como codelabs en Google Cloud Storage.
 
-## Why bother with this approach when I can write tutorials directly in Markdown?
+## Formatos de entrada soportados
 
-Some people like the Google Docs authoring flow, others prefer to specify their codelabs
-directly in Markdown. Using the Docs approach, one source format can be used to generate
-numerous output formats. Also, you can use a doc for the initial formulation stage, where
-WYSIWYG and easy collaboration are extremely useful. Once the content stabilizes, typically
-after the first launch, you are free to make the generated markdown your source of truth
-and discard the Google Doc as a controlling source. This is desirable because it gives you
-the ability to manage the content as code in a source control system, but it comes at the
-cost of having to commit to one specific output format, or having to maintain multiple
-sources of truth.
-
-This tool and corresponding authoring approach are agnostic with respect to whether (and when)
-you choose to manage your source as a Google Doc or as Markdown text checked into a repo.
-The only hard and fast rule is that, at any one point in time, you should choose one or the
-other. Trying to simultaneously maintain a doc and a corresponding repository is a recipe
-for disaster.
-
-## What are the supported input formats?
-
-* Google Docs (following FORMAT-GUIDE.md formatting conventions)
+* Google Docs (siguiendo las convenciones de formato de FORMAT-GUIDE.md)
 * Markdown
 
-## What are the supported output formats?
+## Formatos de salida soportados
 
-* Google Codelabs - HTML and Markdown
+* Google Codelabs - HTML y Markdown
 * Qwiklabs - Markdown
-* Cloud Shell Tutorials - Markdown with special directives
-* Jupyter, Kaggle Kernels, Colaboratory, et. al. - Markdown with format specific cells
+* Cloud Shell Tutorials - Markdown con directivas especiales
+* Jupyter, Kaggle Kernels, Colaboratory, etc. - Markdown con celdas específicas del formato
 
-There’s no one “best” publication format. Each format has its own advantages,
-disadvantages, community, and application domain. For example, Jupyter has a very strong
-following in the data science and Python communities.
+No hay un "mejor" formato de publicación único. Cada formato tiene sus propias ventajas, desventajas, comunidad y dominio de aplicación. Por ejemplo, Jupyter tiene un seguimiento muy fuerte en las comunidades de ciencia de datos y Python.
 
-This variety of formats is healthy because we’re seeing new innovative approaches all the
-time (for example, see observablehq.com, which recently launched their Beta release).
+Esta variedad de formatos es saludable porque estamos viendo nuevos enfoques innovadores todo el tiempo (por ejemplo, consulta observablehq.com, que recientemente lanzó su versión Beta).
 
-While this evolving format ecosystem is generally a good thing, having to maintain tutorials in
-multiple formats, or switch from one format to another can be painful. The Codelabs doc format
-(as specified in FORMAT-GUIDE.md) can provide a high level specification for maintaining
-a single source of truth, programmatically translated into one or more tutorial specific formats.
+Mientras que este ecosistema de formatos en evolución es generalmente algo bueno, tener que mantener tutoriales en múltiples formatos, o cambiar de un formato a otro puede ser doloroso. El formato de documento de Codelabs (como se especifica en FORMAT-GUIDE.md) puede proporcionar una especificación de alto nivel para mantener una única fuente de verdad, traducida programáticamente a uno o más formatos específicos de tutorial.
 
-## Can I contribute?
+## Contribuciones
 
-Yes, by all means. Have feature ideas? Send us a pull request or file a bug.
+¡Sí, por supuesto! ¿Tienes ideas de características? Envíanos un pull request o reporta un error.
 
-## Where did this come from?
+Antes de contribuir:
+- Lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md)
+- Firma el [Acuerdo de Licencia de Contribuidor Individual de Google](https://cla.developers.google.com/about/google-individual)
+- Todas las contribuciones requieren revisión de código a través de pull requests de GitHub
 
-For several years, Googlers would rush to build new tutorials and related assets for our
-annual developer event, Google I/O. But every year the authoring platform and distribution
-mechanism changed. As a result, there was little reuse of content and serving infrastructure,
-And every year we essentially kept reinventing the same wheel.
+## Estructura del proyecto
 
-For Google I/O 2014, Shawn Simister wrote a Python program which retrieved
-specially formatted documents from Google Drive, parsed them, and generated
-a nice interactive web-based user experience. This allowed authors to design their
-codelabs using Google Docs, with its great interactivity and collaboration features,
-and automatically convert those documents into beautiful web based tutorials,
-without needing to write a single line of code.
+```
+├── claat/                  # Herramienta CLI principal para generar codelabs
+├── codelab-elements/       # Elementos web personalizados para codelabs
+├── site/                   # Herramientas para generar sitios web de codelabs
+├── sample/                 # Ejemplos de codelabs
+├── FORMAT-GUIDE.md         # Guía completa de formato
+└── CONTRIBUTING.md         # Guía de contribución
+```
 
-Later, Ewa Gasperowicz wrote a site generator, supporting the ability to
-publish custom landing pages, with associated branding and an inventory of codelabs
-specially curated for a given event.
+## Ejemplos
+# Herramientas para crear y servir codelabs
 
-Alex Vaghin later rewrote Shawn's Python program as a statically linked Go program (the claat command in this repo), eliminating many runtime dependencies, improving translation
-performance. Alex also added, among many other enhancements, a proper abstract syntax
-tree (to facilitate translation to different output formats), an app engine based previewer, an extensible rendering engine, support for generating markdown output. Alex also wrote the web serving infrastructure, the build tooling (based on gulp), and, with the author, the ability to self-publish codelabs directly from the preview app.
+Los codelabs son tutoriales interactivos educativos que se pueden crear en Google Docs usando algunas convenciones de formato simples. También puedes crear codelabs usando sintaxis Markdown. Este repositorio contiene todas las herramientas y documentación que necesitas para construir y publicar tus propios codelabs.
 
-Clare Bayley has been the guru of onsite codelab experiences, running events large and small, while Sam Thorogood and Chris Broadfoot made major contributions to the onsite kiosks you may have seen at Google I/O.
+Si estás interesado en crear codelabs, crea un documento siguiendo la [Guía de Formato de Codelabs](FORMAT-GUIDE.md) y consulta el directorio [claat](claat) para una descripción detallada de la herramienta de línea de comandos `claat`.
 
-Eric Bidelman redesigned the codelab user interface using Polymer components and built the g.co/codelabs landing page, to provide a beautiful user experience that looks great and works equally well on desktop and mobile devices.
+También considera unirte al [grupo de Google codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona actualizaciones sobre nuevas versiones.
 
-Lots of other contributions have been made over the years and I’m sure that I’m neglecting some important advances but for the sake of brevity, I’ll leave it at that.
+## ¿Qué es esto?
 
-## Acknowledgements
+Durante más de 3 años, el proyecto CLaaT (Codelabs as a Thing) ha dado a desarrolladores de todo el mundo una experiencia práctica con productos y herramientas de Google. Hemos acumulado más de 500 codelabs de alta calidad, servido millones de visitantes web y apoyado más de 100 eventos, desde reuniones locales hasta Google I/O.
 
-Google Codelabs exists thanks to the talents and efforts of many fine volunteers, including:
-Alex Vaghin, Marc Cohen, Shawn Simister, Ewa Gasperowicz, Eric Bidelman, Robert Kubis, Clare Bayley, Cassie Recher, Chris Broadfoot, Sam Thorogood, Ryan Seys, and the many codelab authors, inside and outside of Google, who have generated a veritable [treasure trove of content](https://g.co/codelabs).
+Este proyecto ha sido implementado como un proyecto voluntario por un pequeño grupo de Googlers dedicados que se preocupan profundamente por este enfoque de "aprender haciendo" para la educación.
 
-## Notes
+## ¿Qué hace especial a esta herramienta?
 
-This is not an official Google product.
+* Flujo de creación potente y flexible a través de Google Docs
+* Soporte opcional para crear en texto Markdown
+* Capacidad de producir tutoriales web o markdown interactivos sin escribir código
+* Vista previa interactiva fácil
+* Monitoreo de uso a través de Google Analytics
+* Soporte para múltiples entornos objetivo (kiosco, web, markdown, offline, etc.)
+* Soporte para uso anónimo - ideal para computadoras públicas en eventos de desarrolladores
+* Se ve genial, con una implementación web responsiva
+* Recuerda dónde se quedó el estudiante al regresar a un codelab
+* Experiencia de usuario amigable para móviles
+
+## ¿Puedo usar esto para crear mis propios codelabs y servir mis codelabs en línea?
+
+Sí, la herramienta claat y el mecanismo de servicio pueden ser usados por cualquiera para crear sus propios codelabs y servir sus propios codelabs en la web.
+
+También puedes usar esta herramienta para crear una página de resumen atractiva como la que ves en el [sitio oficial de Google Codelabs](https://g.co/codelabs).
+
+Si estás interesado en crear codelabs, únete al [grupo codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona acceso a la [Guía de Formato de Codelabs](FORMAT-GUIDE.md).
+
+## ¿Cómo lo uso?
+
+Consulta este [excelente tutorial](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd).
+
+### Configuración del proyecto
+
+1. **Prerrequisitos**
+- Node.js y npm instalados
+- Go instalado (para claat)
+- Navegador web moderno
+
+2. **Instalación**
+```bash
+# Clonar el repositorio
+git clone https://github.com/googlecodelabs/tools.git
+cd tools
+
+# Instalar dependencias
+npm install
+
+# Construir claat
+cd claat
+go build
+```
+
+3. **Crear un documento** siguiendo las convenciones de sintaxis descritas en la [Guía de Formato de Codelabs](FORMAT-GUIDE.md). Aquí hay un [documento de ejemplo](https://docs.google.com/document/d/1E6XMcdTexh5O8JwGy42SY3Ehzi8gOfUGiqTiUX6N04o/). Siéntete libre de copiar ese documento como plantilla inicial. Una vez que tengas tu propio documento fuente, anota su DocId, que es la cadena larga cerca del final de la URL (justo después de docs.google.com/document/d/).
+
+4. **Hacer cambios y previsualizar** tu codelab, usando la aplicación de vista previa proporcionada por Google. Para previsualizar un codelab, instala la [extensión de Chrome Preview Codelab](https://chrome.google.com/webstore/detail/preview-codelab/lhojjnijnkiglhkggagbapfonpdlinji) en tu navegador. Ahora puedes previsualizar un codelab directamente desde la vista de Google Doc haciendo clic en el botón de la extensión de Chrome, que abrirá una nueva pestaña para mostrar la vista previa. Alternativamente, navega manualmente a https://codelabs-preview.appspot.com/?file_id=<google-doc-id>
+
+5. **Instalar el comando claat** -- consulta el [README en el directorio claat](https://github.com/googlecodelabs/tools/blob/master/claat/README.md) de este repo para instrucciones.
+
+6. **Ejecutar el comando claat** para transformar el contenido del documento en uno de los formatos de salida soportados. Los formatos soportados por defecto son html y markdown, pero la herramienta claat soporta agregar formatos adicionales especificando una ruta a una plantilla Go. Por ejemplo, usando el documento de ejemplo anterior:
+
+```
+cd site/codelabs/
+claat export 1rpHleSSeY-MJZ8JvncvYA8CFqlnlcrW8-a4uEaqizPY  
+ok      your-first-pwapp
+```
+
+También puedes especificar un documento markdown (archivo .md) como entrada. Debe adherirse a las convenciones de sintaxis descritas [aquí](https://github.com/googlecodelabs/tools/tree/master/claat/parser/md)
+
+```
+cd site/codelabs/
+claat export document.md
+ok      your-md-based-codelab
+```
+7. **Ejecutar el comando gulp serve**.
+```
+cd site/codelabs/
+gulp serve --codelabs-dir=codelabs
+```
+
+
+
+Esto iniciará un servidor web local y abrirá una pestaña del navegador al servidor local. Haz clic en el hipervínculo que representa tu codelab de interés para experimentar una versión completamente renderizada.
+
+## Comandos de construcción disponibles
+
+Desde el directorio raíz del proyecto:
+
+```bash
+# Limpiar archivos de construcción
+npm run clean
+
+# Construir todos los elementos
+npm run build
+
+# Ejecutar pruebas
+npm run test
+
+# Publicar a npm (solo para mantenedores)
+npm run pub
+```
+
+## ¿Cómo genero mi propia página de inicio?
+
+Consulta las instrucciones en el [readme del directorio site](site/README.md).
+
+## ¿Cómo genero una vista personalizada?
+
+Copia la [vista de muestra](site/app/views/vslive), personalízala a tu gusto, etiqueta y reconstruye los codelabs que quieres incluir, y luego genera tu vista.
+
+## ¿Cómo publico mis codelabs?
+
+La salida generada por `claat` es un conjunto puramente estático de código HTML o Markdown. Como tal, puede ser servido por cualquier mecanismo de servicio web, incluyendo cualquiera de las siguientes opciones:
+
+* Github Pages (`*.github.io`)
+* [Google App Engine](https://cloud.google.com/appengine)
+* [Firebase Static Serving](https://firebase.google.com/products/hosting)
+* [Google Cloud Storage](https://cloud.google.com/storage)
+* Amazon Web Services S3
+* Netlify
+* Cualquier servidor web de código abierto (Nginx, Apache)
+* `python -m SimpleHTTPServer` (Python 2)
+* `python3 -m http.server` (Python 3)
+
+Simplemente confirma los artefactos generados por el comando claat en tu vehículo de servicio preferido y deberías estar listo para comenzar.
+
+El [directorio site](site) contiene herramientas para construir tus propias páginas de inicio personalizadas y publicar tanto páginas de inicio como codelabs en Google Cloud Storage.
+
+## Formatos de entrada soportados
+
+* Google Docs (siguiendo las convenciones de formato de FORMAT-GUIDE.md)
+* Markdown
+
+## Formatos de salida soportados
+
+* Google Codelabs - HTML y Markdown
+* Qwiklabs - Markdown
+* Cloud Shell Tutorials - Markdown con directivas especiales
+* Jupyter, Kaggle Kernels, Colaboratory, etc. - Markdown con celdas específicas del formato
+
+No hay un "mejor" formato de publicación único. Cada formato tiene sus propias ventajas, desventajas, comunidad y dominio de aplicación. Por ejemplo, Jupyter tiene un seguimiento muy fuerte en las comunidades de ciencia de datos y Python.
+
+Esta variedad de formatos es saludable porque estamos viendo nuevos enfoques innovadores todo el tiempo (por ejemplo, consulta observablehq.com, que recientemente lanzó su versión Beta).
+
+Mientras que este ecosistema de formatos en evolución es generalmente algo bueno, tener que mantener tutoriales en múltiples formatos, o cambiar de un formato a otro puede ser doloroso. El formato de documento de Codelabs (como se especifica en FORMAT-GUIDE.md) puede proporcionar una especificación de alto nivel para mantener una única fuente de verdad, traducida programáticamente a uno o más formatos específicos de tutorial.
+
+## Contribuciones
+
+¡Sí, por supuesto! ¿Tienes ideas de características? Envíanos un pull request o reporta un error.
+
+Antes de contribuir:
+- Lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md)
+- Firma el [Acuerdo de Licencia de Contribuidor Individual de Google](https://cla.developers.google.com/about/google-individual)
+- Todas las contribuciones requieren revisión de código a través de pull requests de GitHub
+
+## Estructura del proyecto
+
+```
+├── claat/                  # Herramienta CLI principal para generar codelabs
+├── codelab-elements/       # Elementos web personalizados para codelabs
+├── site/                   # Herramientas para generar sitios web de codelabs
+├── sample/                 # Ejemplos de codelabs
+├── FORMAT-GUIDE.md         # Guía completa de formato
+└── CONTRIBUTING.md         # Guía de contribución
+```
+
+## Ejemplos
+
+Puedes encontrar ejemplos de codelabs en:
+- [Directorio sample/](sample/) - Contiene codelabs de ejemplo
+- [Sitio oficial de Google Codelabs](https://g.co/codelabs) - Cientos de codelabs publicados
+
+## Recursos adicionales
+
+* [Guía de Formato de Codelabs](FORMAT-GUIDE.md) - Documentación completa sobre cómo formatear codelabs
+* [Grupo de autores de codelabs](https://groups.google.com/forum/#!forum/codelab-authors) - Comunidad de autores
+* [Tutorial sobre publicación de codelabs](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd)
+
+## Notas
+
+Este no es un producto oficial de Google.# Herramientas para crear y servir codelabs
+
+Los codelabs son tutoriales interactivos educativos que se pueden crear en Google Docs usando algunas convenciones de formato simples. También puedes crear codelabs usando sintaxis Markdown. Este repositorio contiene todas las herramientas y documentación que necesitas para construir y publicar tus propios codelabs.
+
+Si estás interesado en crear codelabs, crea un documento siguiendo la [Guía de Formato de Codelabs](FORMAT-GUIDE.md) y consulta el directorio [claat](claat) para una descripción detallada de la herramienta de línea de comandos `claat`.
+
+También considera unirte al [grupo de Google codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona actualizaciones sobre nuevas versiones.
+
+## ¿Qué es esto?
+
+Durante más de 3 años, el proyecto CLaaT (Codelabs as a Thing) ha dado a desarrolladores de todo el mundo una experiencia práctica con productos y herramientas de Google. Hemos acumulado más de 500 codelabs de alta calidad, servido millones de visitantes web y apoyado más de 100 eventos, desde reuniones locales hasta Google I/O.
+
+Este proyecto ha sido implementado como un proyecto voluntario por un pequeño grupo de Googlers dedicados que se preocupan profundamente por este enfoque de "aprender haciendo" para la educación.
+
+## ¿Qué hace especial a esta herramienta?
+
+* Flujo de creación potente y flexible a través de Google Docs
+* Soporte opcional para crear en texto Markdown
+* Capacidad de producir tutoriales web o markdown interactivos sin escribir código
+* Vista previa interactiva fácil
+* Monitoreo de uso a través de Google Analytics
+* Soporte para múltiples entornos objetivo (kiosco, web, markdown, offline, etc.)
+* Soporte para uso anónimo - ideal para computadoras públicas en eventos de desarrolladores
+* Se ve genial, con una implementación web responsiva
+* Recuerda dónde se quedó el estudiante al regresar a un codelab
+* Experiencia de usuario amigable para móviles
+
+## ¿Puedo usar esto para crear mis propios codelabs y servir mis codelabs en línea?
+
+Sí, la herramienta claat y el mecanismo de servicio pueden ser usados por cualquiera para crear sus propios codelabs y servir sus propios codelabs en la web.
+
+También puedes usar esta herramienta para crear una página de resumen atractiva como la que ves en el [sitio oficial de Google Codelabs](https://g.co/codelabs).
+
+Si estás interesado en crear codelabs, únete al [grupo codelab-authors](https://groups.google.com/forum/#!forum/codelab-authors), que te conecta con otros autores y proporciona acceso a la [Guía de Formato de Codelabs](FORMAT-GUIDE.md).
+
+## ¿Cómo lo uso?
+
+Consulta este [excelente tutorial](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd).
+
+### Configuración del proyecto
+
+1. **Prerrequisitos**
+- Node.js y npm instalados
+- Go instalado (para claat)
+- Navegador web moderno
+
+2. **Instalación**
+```bash
+# Clonar el repositorio
+git clone https://github.com/googlecodelabs/tools.git
+cd tools
+
+# Instalar dependencias
+npm install
+
+# Construir claat
+cd claat
+go build
+```
+
+3. **Crear un documento** siguiendo las convenciones de sintaxis descritas en la [Guía de Formato de Codelabs](FORMAT-GUIDE.md). Aquí hay un [documento de ejemplo](https://docs.google.com/document/d/1E6XMcdTexh5O8JwGy42SY3Ehzi8gOfUGiqTiUX6N04o/). Siéntete libre de copiar ese documento como plantilla inicial. Una vez que tengas tu propio documento fuente, anota su DocId, que es la cadena larga cerca del final de la URL (justo después de docs.google.com/document/d/).
+
+4. **Hacer cambios y previsualizar** tu codelab, usando la aplicación de vista previa proporcionada por Google. Para previsualizar un codelab, instala la [extensión de Chrome Preview Codelab](https://chrome.google.com/webstore/detail/preview-codelab/lhojjnijnkiglhkggagbapfonpdlinji) en tu navegador. Ahora puedes previsualizar un codelab directamente desde la vista de Google Doc haciendo clic en el botón de la extensión de Chrome, que abrirá una nueva pestaña para mostrar la vista previa. Alternativamente, navega manualmente a https://codelabs-preview.appspot.com/?file_id=<google-doc-id>
+
+5. **Instalar el comando claat** -- consulta el [README en el directorio claat](https://github.com/googlecodelabs/tools/blob/master/claat/README.md) de este repo para instrucciones.
+
+6. **Ejecutar el comando claat** para transformar el contenido del documento en uno de los formatos de salida soportados. Los formatos soportados por defecto son html y markdown, pero la herramienta claat soporta agregar formatos adicionales especificando una ruta a una plantilla Go. Por ejemplo, usando el documento de ejemplo anterior:
+
+```
+cd site/codelabs/
+claat export 1rpHleSSeY-MJZ8JvncvYA8CFqlnlcrW8-a4uEaqizPY  
+ok      your-first-pwapp
+```
+
+También puedes especificar un documento markdown (archivo .md) como entrada. Debe adherirse a las convenciones de sintaxis descritas [aquí](https://github.com/googlecodelabs/tools/tree/master/claat/parser/md)
+
+```
+cd site/codelabs/
+claat export document.md
+ok      your-md-based-codelab
+```
+7. **Ejecutar el comando gulp serve**.
+```
+cd site/codelabs/
+gulp serve --codelabs-dir=codelabs
+```
+
+
+
+Esto iniciará un servidor web local y abrirá una pestaña del navegador al servidor local. Haz clic en el hipervínculo que representa tu codelab de interés para experimentar una versión completamente renderizada.
+
+## Comandos de construcción disponibles
+
+Desde el directorio raíz del proyecto:
+
+```bash
+# Limpiar archivos de construcción
+npm run clean
+
+# Construir todos los elementos
+npm run build
+
+# Ejecutar pruebas
+npm run test
+
+# Publicar a npm (solo para mantenedores)
+npm run pub
+```
+
+## ¿Cómo genero mi propia página de inicio?
+
+Consulta las instrucciones en el [readme del directorio site](site/README.md).
+
+## ¿Cómo genero una vista personalizada?
+
+Copia la [vista de muestra](site/app/views/vslive), personalízala a tu gusto, etiqueta y reconstruye los codelabs que quieres incluir, y luego genera tu vista.
+
+## ¿Cómo publico mis codelabs?
+
+La salida generada por `claat` es un conjunto puramente estático de código HTML o Markdown. Como tal, puede ser servido por cualquier mecanismo de servicio web, incluyendo cualquiera de las siguientes opciones:
+
+* Github Pages (`*.github.io`)
+* [Google App Engine](https://cloud.google.com/appengine)
+* [Firebase Static Serving](https://firebase.google.com/products/hosting)
+* [Google Cloud Storage](https://cloud.google.com/storage)
+* Amazon Web Services S3
+* Netlify
+* Cualquier servidor web de código abierto (Nginx, Apache)
+* `python -m SimpleHTTPServer` (Python 2)
+* `python3 -m http.server` (Python 3)
+
+Simplemente confirma los artefactos generados por el comando claat en tu vehículo de servicio preferido y deberías estar listo para comenzar.
+
+El [directorio site](site) contiene herramientas para construir tus propias páginas de inicio personalizadas y publicar tanto páginas de inicio como codelabs en Google Cloud Storage.
+
+## Formatos de entrada soportados
+
+* Google Docs (siguiendo las convenciones de formato de FORMAT-GUIDE.md)
+* Markdown
+
+## Formatos de salida soportados
+
+* Google Codelabs - HTML y Markdown
+* Qwiklabs - Markdown
+* Cloud Shell Tutorials - Markdown con directivas especiales
+* Jupyter, Kaggle Kernels, Colaboratory, etc. - Markdown con celdas específicas del formato
+
+No hay un "mejor" formato de publicación único. Cada formato tiene sus propias ventajas, desventajas, comunidad y dominio de aplicación. Por ejemplo, Jupyter tiene un seguimiento muy fuerte en las comunidades de ciencia de datos y Python.
+
+Esta variedad de formatos es saludable porque estamos viendo nuevos enfoques innovadores todo el tiempo (por ejemplo, consulta observablehq.com, que recientemente lanzó su versión Beta).
+
+Mientras que este ecosistema de formatos en evolución es generalmente algo bueno, tener que mantener tutoriales en múltiples formatos, o cambiar de un formato a otro puede ser doloroso. El formato de documento de Codelabs (como se especifica en FORMAT-GUIDE.md) puede proporcionar una especificación de alto nivel para mantener una única fuente de verdad, traducida programáticamente a uno o más formatos específicos de tutorial.
+
+## Contribuciones
+
+¡Sí, por supuesto! ¿Tienes ideas de características? Envíanos un pull request o reporta un error.
+
+Antes de contribuir:
+- Lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md)
+- Firma el [Acuerdo de Licencia de Contribuidor Individual de Google](https://cla.developers.google.com/about/google-individual)
+- Todas las contribuciones requieren revisión de código a través de pull requests de GitHub
+
+## Estructura del proyecto
+
+```
+├── claat/                  # Herramienta CLI principal para generar codelabs
+├── codelab-elements/       # Elementos web personalizados para codelabs
+├── site/                   # Herramientas para generar sitios web de codelabs
+├── sample/                 # Ejemplos de codelabs
+├── FORMAT-GUIDE.md         # Guía completa de formato
+└── CONTRIBUTING.md         # Guía de contribución
+```
+
+## Ejemplos
+
+Puedes encontrar ejemplos de codelabs en:
+- [Directorio sample/](sample/) - Contiene codelabs de ejemplo
+- [Sitio oficial de Google Codelabs](https://g.co/codelabs) - Cientos de codelabs publicados
+
+## Recursos adicionales
+
+* [Guía de Formato de Codelabs](FORMAT-GUIDE.md) - Documentación completa sobre cómo formatear codelabs
+* [Grupo de autores de codelabs](https://groups.google.com/forum/#!forum/codelab-authors) - Comunidad de autores
+* [Tutorial sobre publicación de codelabs](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd)
+
+## Notas
+
+Este no es un producto oficial de Google.
+Puedes encontrar ejemplos de codelabs en:
+- [Directorio sample/](sample/) - Contiene codelabs de ejemplo
+- [Sitio oficial de Google Codelabs](https://g.co/codelabs) - Cientos de codelabs publicados
+
+## Recursos adicionales
+
+* [Guía de Formato de Codelabs](FORMAT-GUIDE.md) - Documentación completa sobre cómo formatear codelabs
+* [Grupo de autores de codelabs](https://groups.google.com/forum/#!forum/codelab-authors) - Comunidad de autores
+* [Tutorial sobre publicación de codelabs](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd)
+
+## Notas
+
+Este no es un producto oficial de Google.
+gulp serve --codelabs-dir=codelabs
+```
+
+
+
+Esto iniciará un servidor web local y abrirá una pestaña del navegador al servidor local. Haz clic en el hipervínculo que representa tu codelab de interés para experimentar una versión completamente renderizada.
+
+## Comandos de construcción disponibles
+
+Desde el directorio raíz del proyecto:
+
+```bash
+# Limpiar archivos de construcción
+npm run clean
+
+# Construir todos los elementos
+npm run build
+
+# Ejecutar pruebas
+npm run test
+
+# Publicar a npm (solo para mantenedores)
+npm run pub
+```
+
+## ¿Cómo genero mi propia página de inicio?
+
+Consulta las instrucciones en el [readme del directorio site](site/README.md).
+
+## ¿Cómo genero una vista personalizada?
+
+Copia la [vista de muestra](site/app/views/vslive), personalízala a tu gusto, etiqueta y reconstruye los codelabs que quieres incluir, y luego genera tu vista.
+
+## ¿Cómo publico mis codelabs?
+
+La salida generada por `claat` es un conjunto puramente estático de código HTML o Markdown. Como tal, puede ser servido por cualquier mecanismo de servicio web, incluyendo cualquiera de las siguientes opciones:
+
+* Github Pages (`*.github.io`)
+* [Google App Engine](https://cloud.google.com/appengine)
+* [Firebase Static Serving](https://firebase.google.com/products/hosting)
+* [Google Cloud Storage](https://cloud.google.com/storage)
+* Amazon Web Services S3
+* Netlify
+* Cualquier servidor web de código abierto (Nginx, Apache)
+* `python -m SimpleHTTPServer` (Python 2)
+* `python3 -m http.server` (Python 3)
+
+Simplemente confirma los artefactos generados por el comando claat en tu vehículo de servicio preferido y deberías estar listo para comenzar.
+
+El [directorio site](site) contiene herramientas para construir tus propias páginas de inicio personalizadas y publicar tanto páginas de inicio como codelabs en Google Cloud Storage.
+
+## Formatos de entrada soportados
+
+* Google Docs (siguiendo las convenciones de formato de FORMAT-GUIDE.md)
+* Markdown
+
+## Formatos de salida soportados
+
+* Google Codelabs - HTML y Markdown
+* Qwiklabs - Markdown
+* Cloud Shell Tutorials - Markdown con directivas especiales
+* Jupyter, Kaggle Kernels, Colaboratory, etc. - Markdown con celdas específicas del formato
+
+No hay un "mejor" formato de publicación único. Cada formato tiene sus propias ventajas, desventajas, comunidad y dominio de aplicación. Por ejemplo, Jupyter tiene un seguimiento muy fuerte en las comunidades de ciencia de datos y Python.
+
+Esta variedad de formatos es saludable porque estamos viendo nuevos enfoques innovadores todo el tiempo (por ejemplo, consulta observablehq.com, que recientemente lanzó su versión Beta).
+
+Mientras que este ecosistema de formatos en evolución es generalmente algo bueno, tener que mantener tutoriales en múltiples formatos, o cambiar de un formato a otro puede ser doloroso. El formato de documento de Codelabs (como se especifica en FORMAT-GUIDE.md) puede proporcionar una especificación de alto nivel para mantener una única fuente de verdad, traducida programáticamente a uno o más formatos específicos de tutorial.
+
+## Contribuciones
+
+¡Sí, por supuesto! ¿Tienes ideas de características? Envíanos un pull request o reporta un error.
+
+Antes de contribuir:
+- Lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md)
+- Firma el [Acuerdo de Licencia de Contribuidor Individual de Google](https://cla.developers.google.com/about/google-individual)
+- Todas las contribuciones requieren revisión de código a través de pull requests de GitHub
+
+## Estructura del proyecto
+
+```
+├── claat/                  # Herramienta CLI principal para generar codelabs
+├── codelab-elements/       # Elementos web personalizados para codelabs
+├── site/                   # Herramientas para generar sitios web de codelabs
+├── sample/                 # Ejemplos de codelabs
+├── FORMAT-GUIDE.md         # Guía completa de formato
+└── CONTRIBUTING.md         # Guía de contribución
+```
+
+## Ejemplos
+
+Puedes encontrar ejemplos de codelabs en:
+- [Directorio sample/](sample/) - Contiene codelabs de ejemplo
+- [Sitio oficial de Google Codelabs](https://g.co/codelabs) - Cientos de codelabs publicados
+
+## Recursos adicionales
+
+* [Guía de Formato de Codelabs](FORMAT-GUIDE.md) - Documentación completa sobre cómo formatear codelabs
+* [Grupo de autores de codelabs](https://groups.google.com/forum/#!forum/codelab-authors) - Comunidad de autores
+* [Tutorial sobre publicación de codelabs](https://medium.com/@zarinlo/publish-technical-tutorials-in-google-codelab-format-b07ef76972cd)
+
+## Notas
+
+Este no es un producto oficial de Google.
