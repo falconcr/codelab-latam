@@ -1,0 +1,126 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Necesario para detectar cambios
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build claat tool
+      run: |
+        cd claat
+        go build -o claat
+        chmod +x claat
+        cd ..
+
+    - name: Build codelab elements
+      run: npm run build
+
+    - name: Detect and generate modified codelabs
+      run: |
+        cd site
+        npm install
+        
+        echo "🔍 Detectando archivos .md modificados en /site/codelabs..."
+        
+        # Detectar archivos modificados en el PR/push
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          # Para PRs, comparar con la rama base
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- codelabs/*.md)
+        else
+          # Para push a main, comparar con el commit anterior
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- codelabs/*.md)
+        fi
+        
+        echo "📝 Archivos modificados:"
+        echo "$CHANGED_FILES"
+        
+        if [ -z "$CHANGED_FILES" ]; then
+          echo "✅ No hay codelabs nuevos o modificados"
+          # Aún necesitamos construir el sitio con los codelabs existentes
+          npx gulp build --codelabs-dir=.
+        else
+          echo "🏗️  Procesando codelabs modificados..."
+          
+          # Procesar cada archivo modificado
+          echo "$CHANGED_FILES" | while read -r file; do
+            if [ -f "$file" ]; then
+              echo "📖 Generando codelab desde: $file"
+              ../claat/claat export "$file"
+            fi
+          done
+          
+          # También procesar cualquier .md existente en codelabs/ que no haya sido procesado
+          echo "🔄 Verificando otros codelabs existentes..."
+          for md_file in codelabs/*.md; do
+            if [ -f "$md_file" ]; then
+              codelab_name=$(basename "$md_file" .md)
+              if [ ! -d "$codelab_name" ]; then
+                echo "📖 Generando codelab faltante: $md_file"
+                ../claat/claat export "$md_file"
+              fi
+            fi
+          done
+          
+          # Construir el sitio
+          echo "🏗️  Construyendo sitio web..."
+          npx gulp build --codelabs-dir=.
+        fi
+        
+        # Mostrar estructura final
+        echo "📊 Estructura final de codelabs:"
+        ls -la
+        
+        cd ..
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./site/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
