@@ -1,13 +1,11 @@
 {
-  "title": "Codelabs",
-  "description": "Codelabs provide a guided, tutorial, hands-on coding experience. Most codelabs will step you through the process of building a small application, or adding a new feature to an existing application.",
-  "tags": [],
-  "categories": [],
-  "exclude": [
-    "^lang-.*"
-  ],
+  "title": "Codelab LATAM",
+  "description": "Tutoriales interactivos y prácticos para desarrolladores en Latinoamérica. Aprende tecnologías modernas paso a paso.",
+  "tags": ["intermediate", "beginner", "advanced"],
+  "categories": ["vertexai", "adk", "agents", "web", "cloud", "tutorial"],
+  "exclude": [],
   "logoUrl": "/images/logo.png",
   "toolbarBgColor": "#37474F",
   "sort": "mainCategory",
-  "pins": []
+  "pins": ["crear-agente-adk-desplegar-agent-engine"]
 }
