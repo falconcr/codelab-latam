@@ -63,8 +63,17 @@ jobs:
         
         if [ -z "$CHANGED_FILES" ]; then
           echo "✅ No hay codelabs nuevos o modificados"
-          # Aún necesitamos construir el sitio con los codelabs existentes
-          npx gulp dist --codelabs-dir=.
+          
+          # Verificar si existen codelabs para construir
+          if ls codelabs/*.md 1> /dev/null 2>&1; then
+            echo "🔄 Construyendo sitio con codelabs existentes..."
+            npx gulp dist --codelabs-dir=.
+          else
+            echo "📝 No hay codelabs para construir, creando sitio básico..."
+            # Crear un index básico si no hay codelabs
+            mkdir -p dist
+            echo "<h1>Sitio de Codelabs</h1><p>Agrega archivos .md en site/codelabs/ para ver codelabs aquí.</p>" > dist/index.html
+          fi
         else
           echo "🏗️  Procesando codelabs modificados..."
           
@@ -96,6 +105,17 @@ jobs:
         # Mostrar estructura final
         echo "📊 Estructura final de codelabs:"
         ls -la
+        
+        # Verificar que existe el directorio dist
+        echo "📁 Contenido del directorio dist:"
+        if [ -d "dist" ]; then
+          ls -la dist/
+          echo "📏 Tamaño del directorio dist:"
+          du -sh dist/
+        else
+          echo "❌ ERROR: No se generó el directorio dist/"
+          exit 1
+        fi
         
         cd ..
 
