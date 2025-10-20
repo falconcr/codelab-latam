@@ -35,18 +35,12 @@ jobs:
       with:
         go-version: '1.21'
 
-    - name: Install dependencies
-      run: npm install
-
     - name: Build claat tool
       run: |
         cd claat
         go build -o claat
         chmod +x claat
         cd ..
-
-    - name: Build codelab elements
-      run: npm run build
 
     - name: Detect and generate modified codelabs
       run: |
@@ -70,7 +64,7 @@ jobs:
         if [ -z "$CHANGED_FILES" ]; then
           echo "✅ No hay codelabs nuevos o modificados"
           # Aún necesitamos construir el sitio con los codelabs existentes
-          npx gulp build --codelabs-dir=.
+          npx gulp dist --codelabs-dir=.
         else
           echo "🏗️  Procesando codelabs modificados..."
           
@@ -94,9 +88,9 @@ jobs:
             fi
           done
           
-          # Construir el sitio
+          # Construir el sitio para producción
           echo "🏗️  Construyendo sitio web..."
-          npx gulp build --codelabs-dir=.
+          npx gulp dist --codelabs-dir=.
         fi
         
         # Mostrar estructura final

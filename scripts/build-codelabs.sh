@@ -22,7 +22,7 @@ cd site
 
 # Instalar dependencias si es necesario
 if [ ! -d "node_modules" ]; then
-    echo "📦 Instalando dependencias..."
+    echo "📦 Instalando dependencias del sitio..."
     npm install
 fi
 
@@ -40,11 +40,12 @@ else
     echo "📁 Creando directorio codelabs/..."
     mkdir -p codelabs
     echo "💡 Agrega tus archivos .md en site/codelabs/ y vuelve a ejecutar este script"
+    exit 0
 fi
 
-# Construir el sitio
+# Construir el sitio (esto usa solo las dependencias de site/, no root)
 echo "🏗️  Construyendo sitio web..."
-npx gulp build --codelabs-dir=.
+npx gulp dist --codelabs-dir=.
 
 echo "✅ ¡Construcción completada!"
 echo "🌐 Para servir localmente, ejecuta:"
