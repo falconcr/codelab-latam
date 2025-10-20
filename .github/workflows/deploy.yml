@@ -1,0 +1,93 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:  # Solo ejecución manual
+  push:
+    branches: [ main ]
+    paths: 
+      - 'site/codelabs/*.md'  # Solo cuando cambien codelabs
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'site/package-lock.json'
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Build claat tool
+      run: |
+        cd claat
+        go build -o claat
+        chmod +x claat
+
+    - name: Build site
+      run: |
+        cd site
+        
+        # Instalar dependencias
+        echo "📦 Instalando dependencias..."
+        npm install
+        
+        # Limpiar builds anteriores
+        echo "🧹 Limpiando..."
+        rm -rf dist/ build/
+        
+        # Generar codelabs
+        echo "🔍 Generando codelabs..."
+        if ls codelabs/*.md 1> /dev/null 2>&1; then
+          for md_file in codelabs/*.md; do
+            if [ -f "$md_file" ]; then
+              echo "📝 Procesando: $md_file"
+              ../claat/claat export "$md_file"
+            fi
+          done
+        else
+          echo "⚠️ No hay archivos .md en codelabs/"
+        fi
+        
+        # Construir sitio final
+        echo "🏗️ Construyendo sitio..."
+        npx gulp dist --codelabs-dir=.
+        
+        # Verificar resultado
+        echo "📊 Contenido generado en dist/:"
+        ls -la dist/ || echo "❌ ERROR: No se generó dist/"
+        echo "📏 Tamaño del sitio:"
+        du -sh dist/ || echo "❌ No se pudo calcular tamaño"
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./site/dist
+        retention-days: 1  # Solo mantener 1 día para ahorrar espacio
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
