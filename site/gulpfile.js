@@ -845,20 +845,22 @@ const sortCodelabs = (codelabs, view) => {
 const copyFilteredCodelabs = (dest) =>  {
   // No filters were specified, symlink the codelabs folder directly and save
   // processing.
-  if (CODELABS_FILTER === '*' && VIEWS_FILTER === '*') {
+if (CODELABS_FILTER === '*' && VIEWS_FILTER === '*') {
     const source = path.join(CODELABS_DIR);
     const target = path.join(dest, CODELABS_NAMESPACE);
-    fs.ensureSymlinkSync(source, target, 'dir');
+    // Cambiado de fs.ensureSymlinkSync a fs.copySync para Netlify
+    fs.copySync(source, target, { overwrite: true }); 
     return
   }
 
   const codelabs = collectCodelabs();
 
-  for(let i = 0; i < codelabs.length; i++) {
+for(let i = 0; i < codelabs.length; i++) {
     const codelab = codelabs[i];
     const source = path.join(CODELABS_DIR, codelab.id);
     const target = path.join(dest, CODELABS_NAMESPACE, codelab.id);
-    fs.ensureSymlinkSync(source, target, 'dir');
+    // Cambiado de fs.ensureSymlinkSync a fs.copySync para Netlify
+    fs.copySync(source, target, { overwrite: true }); 
   }
 };
 
